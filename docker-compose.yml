@@ -3,7 +3,8 @@ services:
     build:
       context: ./api
     container_name: consulta-api
-    env_file: .env
+    environment:
+      DATABASE_PATH: ${DATABASE_PATH:-/data/consulta.db}
     ports:
       - "8000:8000"
     volumes:
@@ -22,7 +23,8 @@ services:
     build:
       context: ./client
     container_name: consulta-cliente
-    env_file: .env
+    environment:
+      API_URL: ${API_URL:-http://api:8000}
     depends_on:
       api:
         condition: service_healthy
