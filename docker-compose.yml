@@ -1,0 +1,39 @@
+services:
+  api:
+    build:
+      context: ./api
+    container_name: consulta-api
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - api_data:/data
+    networks:
+      - red_consulta
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped
+
+  cliente:
+    build:
+      context: ./client
+    container_name: consulta-cliente
+    env_file: .env
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - red_consulta
+    command: ["python", "-c", "import time; time.sleep(10**8)"]
+
+volumes:
+  api_data:
+
+networks:
+  red_consulta:
+    name: red_consulta
+    driver: bridge

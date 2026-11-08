@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Crear .env desde .env.example
+        run: cp .env.example .env
+
+      - name: Construir y levantar los contenedores
+        run: docker compose up -d --build --wait
+
+      - name: Estado de los servicios
+        run: docker compose ps
+
+      - name: Probar comunicación cliente -> api
+        run: |
+          ID=$(docker compose exec -T cliente python client.py create "CI" "Prueba desde GitHub Actions" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
+          docker compose exec -T cliente python client.py get "$ID"
+          docker network inspect red_consulta
+
+      - name: Logs si falla
+        if: failure()
+        run: docker compose logs
+
+      - name: Apagar
+        if: always()
+        run: docker compose down -v
