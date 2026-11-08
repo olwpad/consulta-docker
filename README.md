@@ -130,3 +130,11 @@ Los datos se conservan en el volumen `api_data`. Para borrarlo y empezar de cero
 ```bash
 docker compose down -v
 ```
+
+## Integrantes
+
+- Erica Lopez Hurtado
+- Gabriel Mora Plazas
+- Luis Ortiz Vasquez
+- Diana Paola Quiroz Pirazan
+- Cristian Camilo Tobon Gallan
