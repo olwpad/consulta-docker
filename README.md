@@ -26,7 +26,7 @@ En `docker-compose.yml` están los servicios `api` y `cliente`, la red `red_cons
 
 ## Configuración
 
-Las variables se leen desde un archivo `.env`. Ese archivo no se sube al repositorio, así que hay que crearlo a partir de la plantilla:
+`docker-compose.yml` trae valores por defecto para las variables, así que `docker compose up` funciona sin configurar nada. Ninguna de las variables es un secreto. Para cambiarlas se usa un archivo `.env`, que no se sube al repositorio y se crea a partir de la plantilla:
 
 ```bash
 cp .env.example .env
